@@ -5,8 +5,10 @@ import DashboardLayout from "./Layout/DashboardLayout";
 
 // pages
 import Home from "./pages/Home";
+import ErrorPage from "./pages/Error";
 
 const router = createBrowserRouter([
+  { path: "*", element: <ErrorPage /> },
   {
     path: "/",
     element: <RootLayout />,
