@@ -1,10 +1,72 @@
-
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 const Home = () => {
-  return (
-    <div className="p-10">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae inventore doloribus corrupti! Nemo, vel veniam, voluptate, sint accusantium harum distinctio voluptatem dolorem doloremque animi suscipit! Dicta saepe ratione deserunt provident odio reprehenderit facilis nulla, doloribus sunt dolorum consectetur natus suscipit, totam voluptatum labore quisquam laborum eaque. Sapiente delectus blanditiis libero nihil reprehenderit, sequi eum accusamus maxime, est vero ut. Nihil, nostrum. Eos fugiat numquam molestiae blanditiis! Consectetur reiciendis obcaecati porro alias natus recusandae dolore nam dolorem quibusdam molestiae repudiandae beatae voluptatibus accusamus nihil sapiente, consequatur quisquam aperiam perspiciatis suscipit corrupti! Dolor deserunt nam blanditiis sapiente provident ipsum perferendis nulla quibusdam! Deserunt vero ipsum commodi dolore qui sapiente assumenda eligendi temporibus ratione excepturi quos dolorem aspernatur ad, asperiores exercitationem sed ea facilis tenetur sit, expedita nesciunt beatae? Porro delectus molestias, eaque distinctio nulla, architecto atque veniam sint, neque vero aliquid cumque repellat modi odit sed libero asperiores error cum? Culpa ut dolor distinctio consequuntur fuga tenetur veniam aut eligendi maiores eum! Inventore, quasi quis molestias tenetur quisquam cumque est, ad sed, autem debitis voluptatem? Neque, amet eius dolorum facere ullam molestiae exercitationem nihil culpa, consequatur, a rerum natus laudantium est ipsam? Sapiente eos ipsum, quo quas ipsam autem dolor molestiae nesciunt perspiciatis! Repellat deserunt, autem quo fugiat id error pariatur distinctio placeat quasi reiciendis aspernatur aut, quas magni in consectetur eligendi nulla maxime, et quisquam! Veritatis sit excepturi dicta vel molestiae rerum veniam ratione ipsum beatae voluptates ducimus modi, sint obcaecati aliquam ad hic perspiciatis dolorum asperiores repudiandae facilis ipsam autem! Voluptate, porro non suscipit vel hic laboriosam natus aspernatur earum nihil dolores ea, tenetur odit sunt facere veniam quaerat rem provident. Eos at iste aut amet eligendi esse laboriosam molestiae reiciendis voluptate. Repudiandae aliquid ipsa neque. Corrupti magni sequi adipisci, eum perspiciatis ab rem accusamus, non molestias ullam excepturi omnis voluptatibus necessitatibus, velit nam tempore repellendus sunt error neque a debitis quam recusandae eos ipsam? Numquam autem nisi nostrum sed dolorem? Dolorem corporis voluptate suscipit odio eius illo, alias ea, repellat dicta dolore blanditiis omnis autem ratione, nulla quidem! Expedita qui facere obcaecati itaque dicta ipsam, praesentium ducimus adipisci minima perferendis sint veritatis, optio sed ipsa iure animi alias voluptatibus hic id. Atque optio dolorem deserunt aperiam hic commodi quae, quaerat ratione temporibus fugit nesciunt eos dolores accusamus minima nam quod exercitationem? Incidunt nemo magnam assumenda sit, dolorum quod! Consequuntur esse id tempore quidem, placeat voluptates nobis cupiditate voluptatem porro?
-    </div>
-  )
+
+    const [isLoading,setIsLoading] = useState(false);
+    const [value,setValue] = useState('');
+    const [weatherData,setWeatherData] = useState({})
+
+    useEffect(()=>{
+      const apiKey = process.env.API_KEY
+      const url = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${value}&aqi=no`
+
+      const getWeatherData = async ()=>{
+        try {
+          const data = await axios.get(url)
+
+        } catch (error:any) {
+          console.log(error)
+        }
+      }
+    },[])
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault(); // prevent default form submission.
+        // Add your form submission logic here
+        setIsLoading(true);
+        // Simulating an API call
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 1000);
+    }
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(e.target.value);
+    }
+
+    return (
+        <div className="flex justify-center items-center p-8 py-24">
+           <form 
+            onSubmit={handleSubmit}
+           className="bg-white shadow-md rounded-lg p-8 max-w-md w-full">
+            <div className="mb-6">
+              <label htmlFor="search" className="block text-gray-700 text-sm font-bold mb-2">
+                Search Weather
+              </label>
+              <div className="flex">
+                <input
+                  type="text"
+                  id="search"
+                  value={value}
+                  onChange={handleInputChange}
+                  placeholder="Enter city name"
+                  className="shadow appearance-none border rounded-l-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+                <button
+                  type="submit"
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-r-lg transition-colors duration-300 focus:outline-none focus:shadow-outline"
+                  disabled={isLoading}
+                >
+                  {isLoading ? 'Searching...' : 'Search'}
+                </button>
+              </div>
+            </div>
+            <p className="text-center text-gray-500 text-xs">
+              {value ? `Searching for: ${value}` : 'Enter a city name to get the latest weather information.'}
+            </p>
+           </form>
+        </div>
+    )
 }
 
 export default Home
